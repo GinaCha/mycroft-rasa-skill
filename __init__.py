@@ -26,13 +26,13 @@ class RasaSkill(MycroftSkill):
     def __init__(self):
         super(RasaSkill, self).__init__(name="RasaSkill")
         self.conversation_active = False
-        self.rasa_host = "http://localhost:5005/"
+        self.rasa_host = "http://rasa-production:5005/"
         self.append_endpoint = (
-            self.rasa_host + "conversations/mycroft_user/messages?include_events=NONE"
+            self.rasa_host + "conversations/default/messages?include_events=NONE&token=noNnyfOc10plBipoqeGVzg=="
         )
-        self.predict_endpoint = self.rasa_host + "conversations/mycroft_user/predict"
+        self.predict_endpoint = self.rasa_host + "conversations/default/predict?token=noNnyfOc10plBipoqeGVzg=="
         self.action_endpoint = (
-            self.rasa_host + "conversations/mycroft_user/execute?include_events=APPLIED"
+            self.rasa_host + "conversations/default/execute?include_events=APPLIED&token=noNnyfOc10plBipoqeGVzg=="
         )
 
     @intent_handler(IntentBuilder("").require("Chatwithrasa"))
