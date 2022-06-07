@@ -34,9 +34,11 @@ class RasaSkill(MycroftSkill):
         self.action_endpoint = (
             self.rasa_host + "conversations/default/execute?include_events=APPLIED&token=noNnyfOc10plBipoqeGVzg=="
         )
+        print("rasa init: ", self.rasa_host)
 
     @intent_handler(IntentBuilder("").require("Chatwithrasa"))
     def handle_talk_to_rasa_intent(self, message):
+        print("rasa handle_talk_to_rasa_intent message: ", message)
         response = self.get_response("connecting.to.rasa")
         self.conversation_active = True
         while response is not None and self.conversation_active:
@@ -48,9 +50,11 @@ class RasaSkill(MycroftSkill):
                 messages = ["no response from rasa"]
             response = self.handle_final_output(messages[-1])
 
+        print("rasa handle_talk_to_rasa_intent response: ", response)
         self.speak("disconnecting from rasa")
 
     def handle_final_output(self, message, attempts=0):
+        print("rasa handle_final_output message: ", message)
         if attempts > self.button_attempts_max:
             return None
         if attempts > 0:
@@ -106,6 +110,7 @@ class RasaSkill(MycroftSkill):
         return "Sorry I didn't catch that."
 
     def get_rasa_response(self, utterance):
+        print("rasa get_rasa_response utterance: ", utterance)
         if "stop" in utterance.lower():
             self.conversation_active = False
             return [{"text": "goodbye from rasa"}]
@@ -118,6 +123,7 @@ class RasaSkill(MycroftSkill):
 
     def hit_rasa(self, utterance):
         # send our utterance to rasa
+        print("rasa hit_rasa utterance: ", utterance)
         print(f"sending {utterance} to {self.append_endpoint}")
         append_response = requests.post(
             self.append_endpoint, json={"text": utterance, "sender": "user"}
@@ -127,6 +133,7 @@ class RasaSkill(MycroftSkill):
         outputs = []
         while action != "action_listen":
             response = requests.post(self.predict_endpoint).json()
+            print("rasa hit_rasa response: ", response)
             # send the most likely action to the execute endpoint
             action = response["scores"][0]["action"]
             self.log.debug(action)
