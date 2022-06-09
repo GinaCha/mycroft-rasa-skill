@@ -1,4 +1,4 @@
-# mycroft-rasa-skill-ubi
+# mycroft-rasa-skill
 
 ## rasa-chat
 Adapter to chat with an existing Rasa bot via rest channel
